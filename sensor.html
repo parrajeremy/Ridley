@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <style>
+
+         #GAS {
+border: 1px solid black;
+    text-align: center;
+    vertical-align: middle;
+         margins: auto
+         padding: 30px; 
+         width: 400px;
+         height: 200px;    
+         }
+        #service{ 
+border: 1px solid black;
+         padding: 30px; 
+         }
+         #ENV { 
+border: 1px solid black;
+    text-align: center;
+    vertical-align: middle;
+         margins: auto
+         padding: 30px; 
+         width: 400px;
+         height: 200px;    
+         }
+         .center {
+         margin:auto;    
+         }
+         #calibration {
+         margin:auto;    
+         }
+         .center {
+         margin:auto;    
+         }
+         .center {
+         margin:auto;    
+         }
+        input{
+        border: 1px solid black;
+        width: 100px;
+        max-width: 100px;
+        white-space: nowrap;
+        overflow: hidden;
+        }
+    .submit {
+    color: #fff;
+    background-color: #0062a8;
+    font-size: 14px;
+    -webkit-appearance: button;
+    cursor: pointer;
+    position: relative;
+    min-width: 96px;
+    border-radius: 2px;
+    padding: 4px 12px;
+    box-shadow: 2px 2px 0 rgba(0,0,0,0.15);
+    border-width: 0;
+    border-color: #010000;
+    display: inline-block;
+    margin-bottom: 0;
+    font-weight: normal;
+    text-align: center;
+    vertical-align: middle;
+    background-image: none;
+    border: 1px solid transparent;
+    white-space: normal;
+    line-height: 1.428571429;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    box-sizing: border-box;
+}
+      </style>
+      <script src="jquery-1.10.2.js"></script>
+      <script src="c3.min.js"></script>
+      <script src="d3.v3.min.js"></script>
+      <script src="dbint.js"></script>
+      <script>
+function useCalibrationParams() {
+         	localStorage.setItem('AA_sen', 9.74);
+		localStorage.setItem('AA_base', 110.08);
+		localStorage.setItem('AA_zero', 0);
+		localStorage.setItem('AA_span', 0);
+		localStorage.setItem('AB_sen', 9.93);
+		localStorage.setItem('AB_base', 14.84);
+		localStorage.setItem('AB_zero', 0);
+		localStorage.setItem('AB_span', 0.6);
+		localStorage.setItem('BA_sen', -14.05);
+		localStorage.setItem('BA_base', 1.16);
+		localStorage.setItem('BA_zero', 0);
+		localStorage.setItem('BA_span', 0);
+		localStorage.setItem('BB_sen', -34.96);
+		localStorage.setItem('BB_base', -0.02);
+		localStorage.setItem('BB_zero', 0);
+		localStorage.setItem('BB_span', 0);
+		localStorage.setItem('CA_sen', 27.84);
+		localStorage.setItem('CA_base', 43.78);
+		localStorage.setItem('CA_zero', 0);
+		localStorage.setItem('CA_span', 1.2);
+		localStorage.setItem('CB_sen', 186.80);
+		localStorage.setItem('CB_base', 109.14);
+		localStorage.setItem('CB_zero', 0);
+		localStorage.setItem('CB_span', 0.3);
+		localStorage.setItem('DA_sen', 11.29);
+		localStorage.setItem('DA_base', 117.44);
+		localStorage.setItem('DA_zero', 0);
+		localStorage.setItem('DA_span', 0);
+		localStorage.setItem('DB_sen', -48.13);
+		localStorage.setItem('DB_base', 0.75);
+		localStorage.setItem('DB_zero', 0);
+		localStorage.setItem('DB_span', 0);
+        	//localStorage.clear();
+         	var elem = document.getElementById("AA_sen");
+         	elem.value = localStorage.getItem('AA_sen');
+         	var elem = document.getElementById("AA_base");
+         	elem.value = localStorage.getItem('AA_base');
+         	var elem = document.getElementById("AA_zero");
+         	elem.value = localStorage.getItem('AA_zero');
+         	var elem = document.getElementById("AA_span");
+         	elem.value = localStorage.getItem('AA_span');
+         	var elem = document.getElementById("AB_sen");
+         	elem.value = localStorage.getItem('AB_sen');
+         	var elem = document.getElementById("AB_base");
+         	elem.value = localStorage.getItem('AB_base');
+         	var elem = document.getElementById("AB_zero");
+         	elem.value = localStorage.getItem('AB_zero');
+         	var elem = document.getElementById("AB_span");
+         	elem.value = localStorage.getItem('AB_span');
+         
+         	var elem = document.getElementById("BB_sen");
+         	elem.value = localStorage.getItem('BB_sen');
+         	var elem = document.getElementById("BB_base");
+         	elem.value = localStorage.getItem('BB_base');
+         	var elem = document.getElementById("BB_zero");
+         	elem.value = localStorage.getItem('BB_zero');
+         	var elem = document.getElementById("BB_span");
+         	elem.value = localStorage.getItem('BB_span');
+         	var elem = document.getElementById("BA_sen");
+         	elem.value = localStorage.getItem('BA_sen');
+         	var elem = document.getElementById("BA_base");
+         	elem.value = localStorage.getItem('BA_base');
+         	var elem = document.getElementById("BA_zero");
+         	elem.value = localStorage.getItem('BA_zero');
+         	var elem = document.getElementById("BA_span");
+         	elem.value = localStorage.getItem('BA_span');
+         	var elem = document.getElementById("CB_sen");
+         	elem.value = localStorage.getItem('CB_sen');
+         	var elem = document.getElementById("CB_base");
+         	elem.value = localStorage.getItem('CB_base');
+         	var elem = document.getElementById("CB_zero");
+         	elem.value = localStorage.getItem('CB_zero');
+         	var elem = document.getElementById("CB_span");
+         	elem.value = localStorage.getItem('CB_span');
+         	var elem = document.getElementById("CA_sen");
+         	elem.value = localStorage.getItem('CA_sen');
+         	var elem = document.getElementById("CA_base");
+         	elem.value = localStorage.getItem('CA_base');
+         	var elem = document.getElementById("CA_zero");
+         	elem.value = localStorage.getItem('CA_zero');
+         	var elem = document.getElementById("CA_span");
+         	elem.value = localStorage.getItem('CA_span');
+         	var elem = document.getElementById("DB_sen");
+         	elem.value = localStorage.getItem('DB_sen');
+         	var elem = document.getElementById("DB_base");
+         	elem.value = localStorage.getItem('DB_base');
+         	var elem = document.getElementById("DB_zero");
+         	elem.value = localStorage.getItem('DB_zero');
+         	var elem = document.getElementById("DB_span");
+         	elem.value = localStorage.getItem('DB_span');
+         	var elem = document.getElementById("DA_sen");
+         	elem.value = localStorage.getItem('DA_sen');
+         	var elem = document.getElementById("DA_base");
+         	elem.value = localStorage.getItem('DA_base');
+         	var elem = document.getElementById("DA_zero");
+         	elem.value = localStorage.getItem('DA_zero');
+         	var elem = document.getElementById("DA_span");
+         	elem.value = localStorage.getItem('DA_span');
+         
+         	var elem = document.getElementById("AAsel");
+         	elem.value = localStorage.getItem('AAsel');
+         	var elem = document.getElementById("ABsel");
+         	elem.value = localStorage.getItem('ABsel');
+         	var elem = document.getElementById("BAsel");
+         	elem.value = localStorage.getItem('BAsel');
+         	var elem = document.getElementById("BBsel");
+         	elem.value = localStorage.getItem('BBsel');
+         	var elem = document.getElementById("CAsel");
+         	elem.value = localStorage.getItem('CAsel');
+         	var elem = document.getElementById("CBsel");
+         	elem.value = localStorage.getItem('CBsel');
+         	var elem = document.getElementById("DAsel");
+         	elem.value = localStorage.getItem('DAsel');
+         	var elem = document.getElementById("DBsel");
+         	elem.value = localStorage.getItem('DBsel');
+         
+         	var elem = document.getElementById("AAunit");
+         	elem.value = localStorage.getItem('AAunit');
+         	var elem = document.getElementById("ABunit");
+         	elem.value = localStorage.getItem('ABunit');
+         	var elem = document.getElementById("BAunit");
+         	elem.value = localStorage.getItem('BAunit');
+         	var elem = document.getElementById("BBunit");
+         	elem.value = localStorage.getItem('BBunit');
+         	var elem = document.getElementById("CAunit");
+         	elem.value = localStorage.getItem('CAunit');
+         	var elem = document.getElementById("CBunit");
+         	elem.value = localStorage.getItem('CBunit');
+         	var elem = document.getElementById("DAunit");
+         	elem.value = localStorage.getItem('DAunit');
+         	var elem = document.getElementById("DBunit");
+         	elem.value = localStorage.getItem('DBunit');
+            var statuselem = document.getElementById("status"); 
+            statuselem.innerHTML= sessionStorage.getItem("status");
+
+}
+         function startstatus() {
+         sessionStorage.setItem('status', "<font size=4 color='green'><b>Started</b></font>");
+         var statuselem = document.getElementById("status"); 
+         statuselem.innerHTML=sessionStorage.getItem("status");
+         }
+         function stopstatus() {
+         sessionStorage.setItem('status', "<font size=4 color='red'><b>Stopped</b></font>");
+         var statuselem = document.getElementById("status"); 
+         statuselem.innerHTML=sessionStorage.getItem("status");
+         }
+      </script>
+      <noscript></noscript>
+      <meta content="text/html; charset=windows-1252" http-equiv="content-type">
+      <title>Briza</title>
+      <link rel="stylesheet" type="text/css" href="main.css" media="screen">
+      <link type="text/css" rel="stylesheet" href="./c3.min.css"
+         />
+   </head>
+   <body>
+      <a href="/" style="text-decoration: none">
+         <h1 style="background-color: #0062a8;">Sensor Details</h1>
+      </a>
+      <div class="menu">
+         <table>
+            <tbody>
+               <tr>
+                  <td class="menuitem"> <a href="/" style="text-decoration: none; color: white;">Wifi</a>
+                  </td>
+                  <td class="menuitem"> <a href="upgrade.html" style="text-decoration: none; color:white">Upgrade</a>
+                  </td>
+                  <!--<td class="menuitem"> <a href="sensorconf.html" style="text-decoration: none; color: white;">Configure</a>
+                     </td>-->
+                  <td class="menuitem" style="background-color: white;"> <a href="sensor.html" style="text-decoration: none; color:#0062a8">Sensors</a> </td>
+                  <td> 	
+                     <br>
+                  </td>
+               </tr>
+            </tbody>
+         </table>
+      </div>
+      <div id="graph_section" class="section">
+<div class="header">Realtime Data</div>
+         <table>
+            <tbody>
+               <tr>
+                  <td>
+                    <div class="left">                     
+                    <label>Gaseous Pollutants &nbsp; </label>
+                     <div id="GAS"></div>
+                    </div>
+                  </td>
+                  <td>
+                     <!--For attached PM sensor module
+                        <div id="pm_section" class="section">
+                        <h3>Particulate Matter</h3>
+                        <div id="PM"></div>
+                        </tr>
+                        </div>-->
+                    <div class="right">                      
+                     <label>Meteorological &nbsp;</label>
+                     <div id="ENV"></div>
+                     </div>
+                  </td>
+               </tr>
+            </tbody>
+         </table>
+      </div>
+      <script>
+         fetchPosts();
+          fetchData();
+
+         setInterval(function () {
+             var lastTime = localStorage.getItem('lastTime');
+             var newTime = localStorage.getItem('newTime');   
+             //
+             
+             console.log("Updating data");    
+             console.log("Last Time: " + lastTime);
+             console.log("New Last Time: " + newTime);    
+             if (newTime!=lastTime) {
+             	envLoad();
+               gasLoad();        
+         
+           } else {
+         console.log("No new data. Service really running?");
+         }
+          }, 5000);
+         var ENVchart = c3.generate({
+             data: {
+         	x: 'Time',
+            xFormat: '%H:%M:%S', 
+                  columns: [
+                     ['Humidity (%)', ].concat(rhArray),
+                     ['Pressure (hPa)', ].concat(pressureArray),
+                     ['Temperature (C)', ].concat(tempArray),
+         	    	    ['Time', ].concat(timeArray),
+         
+                 ],
+         type: 'area-spline',
+             },
+         point: {
+           show: false
+         }, 
+         axis: {
+             x: {
+           type: 'timeseries',
+           show: true,
+            tick: {
+                count: 10,
+                format: '%H:%M:%S'
+            }
+         }
+         },
+         zoom: {
+         	enabled: true
+         },
+         	bindto: '#ENV'
+         });
+         var GASchart = c3.generate({
+         	data: {
+         	x: 'Time',
+            xFormat: '%H:%M:%S', 
+                  columns: [
+                     [localStorage.getItem('AAlabel'), ].concat(AAArray),
+                     [localStorage.getItem('ABlabel'), ].concat(ABArray),
+                     [localStorage.getItem('BAlabel'), ].concat(BAArray),
+                     [localStorage.getItem('BBlabel'), ].concat(BBArray),
+                     [localStorage.getItem('CAlabel'), ].concat(CAArray),
+                     [localStorage.getItem('CBlabel'), ].concat(CBArray),
+                     [localStorage.getItem('DAlabel'), ].concat(DAArray),
+                     [localStorage.getItem('DBlabel'), ].concat(DBArray),
+             	    ['Time', ].concat(timeArray),
+         
+                 ],
+         type: 'area-spline',
+             },
+         point: {
+           show: false
+         }, 
+         zoom: {
+         	enabled: true
+         },
+         axis: {
+             x: {
+           type: 'timeseries',
+           show: true,
+            tick: {
+                count: 10,
+                format: '%H:%M:%S'
+            }
+         }
+         },
+         	bindto: '#GAS'
+         });
+         function gasLoad() {
+         GASchart.load({
+                  columns: [
+                     [localStorage.getItem('AAlabel'), ].concat(AAArray),
+                     [localStorage.getItem('ABlabel'), ].concat(ABArray),
+                     [localStorage.getItem('BAlabel'), ].concat(BAArray),
+                     [localStorage.getItem('BBlabel'), ].concat(BBArray),
+                     [localStorage.getItem('CAlabel'), ].concat(CAArray),
+                     [localStorage.getItem('CBlabel'), ].concat(CBArray),
+                     [localStorage.getItem('DAlabel'), ].concat(DAArray),
+                     [localStorage.getItem('DBlabel'), ].concat(DBArray),
+         	    	    ['Time', ].concat(timeArray),
+                 ],
+             });
+             }
+         
+         ///
+         function envLoad() {
+         ENVchart.load({
+                 columns: [
+                     ['Humidity (%)', ].concat(rhArray),
+                     ['Pressure (hPa)', ].concat(pressureArray),
+                     ['Temperature (C)', ].concat(tempArray),
+         	    	    ['Time', ].concat(timeArray),
+         
+                 ]
+             });
+         }
+         setInterval(function () {
+         fetchData();
+          }, 10000);
+         setTimeout(function () {    
+            gasLoad();
+            envLoad();
+          }, 1000);
+      </script>
+      <div id="service_section" class="section">
+    <div class="header" style="center">Service Control</div>
+<div id="service">         
+    <table class="content">
+            <tbody>
+               <tr>
+                  <td>
+                     <h4>Service:</h4>
+                </td>
+                <td>                     
+                    <label id="status"></label>
+                  </td>
+               </tr>
+               <tr>
+                  <td>
+                     <form action="start" method="post" id="start">
+                        <button onclick="javascript: startstatus();" type="start">Start</button>
+                     </form>
+                     <form action="stop" method="post" id="stop">
+                        <button onclick="javascript: stopstatus();" type="stop">Stop</button>
+                     </form>
+                     <form action="reset" method="post" id="reset">
+                        <button type="submit">Reset Data</button>
+                     </form>
+                  </td>
+               </tr>
+            </tbody>
+         </table>
+
+                     <form action="addnew" method="post" id="calibration">
+      <div>
+         <table id="calibration" cellspacing="0" class="content">
+            <tbody>
+
+
+                  <tr>
+                     <th>Address (Module/Sensor)</th>
+                     <th>Type</th>
+                     <th>Units</th>
+                     <th>Sensitivity</th>
+                     <th>Baseline</th>
+                     <th>Zero</th>
+                     <th>Span </th>
+                  </tr>
+                  <tr>
+                     <td> <b>87</b> / <b>Spec1</b> </td>
+                     <td>
+                        <select id="AAsel" name="AAsel" form="calibration">
+                           <option value="CO-">CO</option>
+                           <option value="NO2">NO2</option>
+                           <option value="O3-">O3</option>
+                           <option value="SO2">SO2</option>
+                           <option value="H2S">H2S</option>
+                           <option value="TOX">TOX</option>
+                           <option value="TOR">TOR</option>
+                        </select>
+                     </td>
+                     <td>
+                        <select id="AAunit" name="AAunit" form="calibration">
+                           <option value="ppm">ppm</option>
+                           <option value="ppb">ppb</option>
+                           <option value="raw">raw</option>
+                        </select>
+                     </td>
+                     <td> <input type="text" name="AA_sen" id="AA_sen" style="margins: auto"></input></td>
+                     <td><input type="text" name="AA_base" id="AA_base" style="margins: auto"></input> </td>
+                     <td><input type="text" name="AA_zero" id="AA_zero" style="margins: auto"></input></td>
+                     <td><input type="text" name="AA_span" id="AA_span" style="margins: auto"></input></td>
+                  </tr>
+                  <tr>
+                     <td> <b>87</b> / <b>Spec2</b>  &nbsp;</td>
+                     <td>
+                        <select id="ABsel" name="ABsel" form="calibration">
+                           <option value="CO-">CO</option>
+                           <option value="NO2">NO2</option>
+                           <option value="O3-">O3</option>
+                           <option value="SO2">SO2</option>
+                           <option value="H2S">H2S</option>
+                           <option value="TOX">TOX</option>
+                           <option value="TOR">TOR</option>
+                        </select>
+                     </td>
+                     <td>
+                        <select id="ABunit" name="ABunit" form="calibration">
+                           <option value="ppm">ppm</option>
+                           <option value="ppb">ppb</option>
+                           <option value="raw">raw</option>
+                        </select>
+                     </td>
+                     <td> <input type="text" name="AB_sen" id="AB_sen"></input><br></td>
+                     <td><input type="text" name="AB_base" id="AB_base"></input><br> </td>
+                     <td><input type="text" name="AB_zero" id="AB_zero"></input><br></td>
+                     <td><input type="text" name="AB_span" id="AB_span"></input><br></td>
+                  </tr>
+                  <tr>
+                     <td><b>86</b> / <b>Spec1</b> &nbsp;</td>
+                     <td>
+                        <select id="BAsel" name="BAsel" form="calibration">
+                           <option value="CO-">CO</option>
+                           <option value="NO2">NO2</option>
+                           <option value="O3-">O3</option>
+                           <option value="SO2">SO2</option>
+                           <option value="H2S">H2S</option>
+                           <option value="TOX">TOX</option>
+                           <option value="TOR">TOR</option>
+                        </select>
+                     </td>
+                     <td>
+                        <select id="BAunit" name="BAunit" form="calibration">
+                           <option value="ppm">ppm</option>
+                           <option value="ppb">ppb</option>
+                           <option value="raw">raw</option>
+                        </select>
+                     </td>
+                     <td> <input type="text" name="BA_sen" id="BA_sen"></input><br></td>
+                     <td><input type="text" name="BA_base" id="BA_base"></input><br> </td>
+                     <td><input type="text" name="BA_zero" id="BA_zero"></input><br></td>
+                     <td><input type="text" name="BA_span" id="BA_span"></input><br></td>
+                  </tr>
+                  <tr>
+                     <td><b>86</b> / <b>Spec2</b>  </td>
+                     <td>
+                        <select id="BBsel" name="BBsel" form="calibration">
+                           <option value="CO-">CO</option>
+                           <option value="NO2">NO2</option>
+                           <option value="O3-">O3</option>
+                           <option value="SO2">SO2</option>
+                           <option value="H2S">H2S</option>
+                           <option value="TOX">TOX</option>
+                           <option value="TOR">TOR</option>
+                        </select>
+                     </td>
+                     <td>
+                        <select id="BBunit" name="BBunit" form="calibration">
+                           <option value="ppm">ppm</option>
+                           <option value="ppb">ppb</option>
+                           <option value="raw">raw</option>
+                        </select>
+                     </td>
+                     <td><input type="text" name="BB_sen" id="BB_sen"></input><br></td>
+                     <td><input type="text" name="BB_base" id="BB_base"></input><br>  </td>
+                     <td><input type="text" name="BB_zero" id="BB_zero"></input><br></td>
+                     <td><input type="text" name="BB_span" id="BB_span"></input><br></td>
+                  </tr>
+                  <tr>
+                     <td><b>85</b> / <b>Spec1</b>  &nbsp;</td>
+                     <td>
+                        <select id="CAsel" name="CAsel" form="calibration">
+                           <option value="CO-">CO</option>
+                           <option value="NO2">NO2</option>
+                           <option value="O3-">O3</option>
+                           <option value="SO2">SO2</option>
+                           <option value="H2S">H2S</option>
+                           <option value="TOX">TOX</option>
+                           <option value="TOR">TOR</option>
+                        </select>
+                     </td>
+                     <td>
+                        <select id="CAunit" name="CAunit" form="calibration">
+                           <option value="ppm">ppm</option>
+                           <option value="ppb">ppb</option>
+                           <option value="raw">raw</option>
+                        </select>
+                     </td>
+                     <td> <input type="text" name="CA_sen" id="CA_sen" ></input><br></td>
+                     <td><input type="text" name="CA_base" id="CA_base" ></input><br> </td>
+                     <td><input type="text" name="CA_zero" id="CA_zero" ></input><br></td>
+                     <td><input type="text" name="CA_span" id="CA_span" ></input><br></td>
+                  </tr>
+                  <tr>
+                     <td><b>85</b> / <b>Spec2</b> </td>
+                     <td>
+                        <select id="CBsel"  name="CBsel" form="calibration">
+                           <option value="CO-">CO</option>
+                           <option value="NO2">NO2</option>
+                           <option value="O3-">O3</option>
+                           <option value="SO2">SO2</option>
+                           <option value="H2S">H2S</option>
+                           <option value="TOX">TOX</option>
+                           <option value="TOR">TOR</option>
+                        </select>
+                     </td>
+                     <td>
+                        <select id="CBunit" name="CBunit" form="calibration">
+                           <option value="ppm">ppm</option>
+                           <option value="ppb">ppb</option>
+                           <option value="raw">raw</option>
+                        </select>
+                     </td>
+                     <td><input type="text" name="CB_sen" id="CB_sen" ></input><br></td>
+                     <td><input type="text" name="CB_base" id="CB_base" ></input><br>  </td>
+                     <td><input type="text" name="CB_zero" id="CB_zero" ></input><br></td>
+                     <td><input type="text" name="CB_span" id="CB_span" ></input><br></td>
+                  </tr>
+                  <tr>
+                     <td><b>83</b> / <b>Spec1</b> </td>
+                     <td>
+                        <select id="DAsel" name="DAsel" form="calibration">
+                           <option value="CO-">CO</option>
+                           <option value="NO2">NO2</option>
+                           <option value="O3-">O3</option>
+                           <option value="SO2">SO2</option>
+                           <option value="H2S">H2S</option>
+                           <option value="TOX">TOX</option>
+                           <option value="TOR">TOR</option>
+                        </select>
+                     </td>
+                     <td>
+                        <select id="DAunit" name="DAunit" form="calibration">
+                           <option value="ppm">ppm</option>
+                           <option value="ppb">ppb</option>
+                           <option value="raw">raw</option>
+                        </select>
+                     </td>
+                     <td><input type="text" name="DA_sen" id="DA_sen" ></input><br></td>
+                     <td><input type="text" name="DA_base" id="DA_base" ></input><br> </td>
+                     <td><input type="text" name="DA_zero" id="DA_zero" ></input><br></td>
+                     <td><input type="text" name="DA_span" id="DA_span" ></input><br></td>
+                  </tr>
+                  <tr>
+                     <td><b>83</b> / <b>Spec2</b></td>
+                     <td>
+                        <select id="DBsel" name="DBsel" form="calibration">
+                           <option value="CO-">CO</option>
+                           <option value="NO2">NO2</option>
+                           <option value="O3-">O3</option>
+                           <option value="SO2">SO2</option>
+                           <option value="H2S">H2S</option>
+                           <option value="TOX">TOX</option>
+                           <option value="TOR">TOR</option>
+                        </select>
+                     </td>
+                     <td>
+                        <select id="DBunit" name="DBunit" form="calibration">
+                           <option value="ppm">ppm</option>
+                           <option onchange="useCalibrationParams()" value="ppb">ppb</option>
+                           <option value="raw">raw</option>
+                        </select>
+                     </td>
+                     <td><input type="text" name="DB_sen" id="DB_sen" ></input><br></td>
+                     <td><input type="text" name="DB_base" id="DB_base" ></input><br>  </td>
+                     <td><input type="text" name="DB_zero" id="DB_zero" ></input><br></td>
+                     <td><input type="text" name="DB_span" id="DB_span" ></input><br></td>
+                  </tr>
+            </tbody>
+
+         </table>
+     
+      
+      
+ </div>
+
+</div>
+<div class="submit_section"> <input class="submit" value="Commit" type="submit"> </div>
+</form> 
+      <script>
+        
+         function fetchCalibration() {
+         	
+             fetchPosts();
+
+         	//localStorage.clear();
+         	var elem = document.getElementById("AA_sen");
+         	elem.value = localStorage.getItem('AA_sen');
+         	var elem = document.getElementById("AA_base");
+         	elem.value = localStorage.getItem('AA_base');
+         	var elem = document.getElementById("AA_zero");
+         	elem.value = localStorage.getItem('AA_zero');
+         	var elem = document.getElementById("AA_span");
+         	elem.value = localStorage.getItem('AA_span');
+         	var elem = document.getElementById("AB_sen");
+         	elem.value = localStorage.getItem('AB_sen');
+         	var elem = document.getElementById("AB_base");
+         	elem.value = localStorage.getItem('AB_base');
+         	var elem = document.getElementById("AB_zero");
+         	elem.value = localStorage.getItem('AB_zero');
+         	var elem = document.getElementById("AB_span");
+         	elem.value = localStorage.getItem('AB_span');
+         
+         	var elem = document.getElementById("BB_sen");
+         	elem.value = localStorage.getItem('BB_sen');
+         	var elem = document.getElementById("BB_base");
+         	elem.value = localStorage.getItem('BB_base');
+         	var elem = document.getElementById("BB_zero");
+         	elem.value = localStorage.getItem('BB_zero');
+         	var elem = document.getElementById("BB_span");
+         	elem.value = localStorage.getItem('BB_span');
+         	var elem = document.getElementById("BA_sen");
+         	elem.value = localStorage.getItem('BA_sen');
+         	var elem = document.getElementById("BA_base");
+         	elem.value = localStorage.getItem('BA_base');
+         	var elem = document.getElementById("BA_zero");
+         	elem.value = localStorage.getItem('BA_zero');
+         	var elem = document.getElementById("BA_span");
+         	elem.value = localStorage.getItem('BA_span');
+         	var elem = document.getElementById("CB_sen");
+         	elem.value = localStorage.getItem('CB_sen');
+         	var elem = document.getElementById("CB_base");
+         	elem.value = localStorage.getItem('CB_base');
+         	var elem = document.getElementById("CB_zero");
+         	elem.value = localStorage.getItem('CB_zero');
+         	var elem = document.getElementById("CB_span");
+         	elem.value = localStorage.getItem('CB_span');
+         	var elem = document.getElementById("CA_sen");
+         	elem.value = localStorage.getItem('CA_sen');
+         	var elem = document.getElementById("CA_base");
+         	elem.value = localStorage.getItem('CA_base');
+         	var elem = document.getElementById("CA_zero");
+         	elem.value = localStorage.getItem('CA_zero');
+         	var elem = document.getElementById("CA_span");
+         	elem.value = localStorage.getItem('CA_span');
+         	var elem = document.getElementById("DB_sen");
+         	elem.value = localStorage.getItem('DB_sen');
+         	var elem = document.getElementById("DB_base");
+         	elem.value = localStorage.getItem('DB_base');
+         	var elem = document.getElementById("DB_zero");
+         	elem.value = localStorage.getItem('DB_zero');
+         	var elem = document.getElementById("DB_span");
+         	elem.value = localStorage.getItem('DB_span');
+         	var elem = document.getElementById("DA_sen");
+         	elem.value = localStorage.getItem('DA_sen');
+         	var elem = document.getElementById("DA_base");
+         	elem.value = localStorage.getItem('DA_base');
+         	var elem = document.getElementById("DA_zero");
+         	elem.value = localStorage.getItem('DA_zero');
+         	var elem = document.getElementById("DA_span");
+         	elem.value = localStorage.getItem('DA_span');
+         
+         	var elem = document.getElementById("AAsel");
+         	elem.value = localStorage.getItem('AAsel');
+         	var elem = document.getElementById("ABsel");
+         	elem.value = localStorage.getItem('ABsel');
+         	var elem = document.getElementById("BAsel");
+         	elem.value = localStorage.getItem('BAsel');
+         	var elem = document.getElementById("BBsel");
+         	elem.value = localStorage.getItem('BBsel');
+         	var elem = document.getElementById("CAsel");
+         	elem.value = localStorage.getItem('CAsel');
+         	var elem = document.getElementById("CBsel");
+         	elem.value = localStorage.getItem('CBsel');
+         	var elem = document.getElementById("DAsel");
+         	elem.value = localStorage.getItem('DAsel');
+         	var elem = document.getElementById("DBsel");
+         	elem.value = localStorage.getItem('DBsel');
+         
+         	var elem = document.getElementById("AAunit");
+         	elem.value = localStorage.getItem('AAunit');
+         	var elem = document.getElementById("ABunit");
+         	elem.value = localStorage.getItem('ABunit');
+         	var elem = document.getElementById("BAunit");
+         	elem.value = localStorage.getItem('BAunit');
+         	var elem = document.getElementById("BBunit");
+         	elem.value = localStorage.getItem('BBunit');
+         	var elem = document.getElementById("CAunit");
+         	elem.value = localStorage.getItem('CAunit');
+         	var elem = document.getElementById("CBunit");
+         	elem.value = localStorage.getItem('CBunit');
+         	var elem = document.getElementById("DAunit");
+         	elem.value = localStorage.getItem('DAunit');
+         	var elem = document.getElementById("DBunit");
+         	elem.value = localStorage.getItem('DBunit');
+            var statuselem = document.getElementById("status"); 
+            statuselem.innerHTML= sessionStorage.getItem("status");
+             
+         	}
+         fetchCalibration();
+      </script>
+      </div> 
+   </body>
+</html>
