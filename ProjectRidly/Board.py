@@ -11,10 +11,7 @@ import EEPROM as eeprom
 import sensor_init as s
 import time as t
 import sqlite3
-sen1 = '1'
-sen2 = '2'
-s1 = ''
-s2 = ''
+
 
 #[b_eeprom.board1, b_eeprom.board2, b_eeprom.board3, b_eeprom.board4]
 
@@ -75,6 +72,7 @@ def board_init(boardAddr):
 #board_init(0x57)
             
 def boards(): 
+        
     conn = sqlite3.connect("/home/root/Ridley/ProjectRidly/unified.db")#/usr/lib/edison_config_tools/public/unified.db")
     c = conn.cursor()
     #with dbopen("/usr/lib/edison_config_tools/public/unified.db") as c:
@@ -88,6 +86,8 @@ def boards():
         addr = int(addr[0])  
         addrs.append(addr)
     return addrs
+    
+#if __name__ =="__main__":
     
 board_addr = boards()
 

@@ -4,17 +4,14 @@ echo "src/gz edison http://repo.opkg.net/edison/repo/edison" > /etc/opkg/base-fe
 echo "src/gz core2-32 http://repo.opkg.net/edison/repo/core2-32" > /etc/opkg/base-feeds.conf
 echo "src mraa-upm http://iotdk.intel.com/repos/1.1/intelgalactic" > /etc/opkg/mraa-upm.conf
 opkg update
+opkg upgrade
 git clone https://github.com/isclayton/Ridley.git
-#opkg upgrade
 opkg install git
 echo "src mraa-upm http://iotdk.intel.com/repos/1.1/intelgalactic-dev" > /etc/opkg/mraa-upm.conf 
 opkg update 
 opkg install libmraa0 
 curl -o get-pip.py https://bootstrap.pypa.io/get-pip.py
-sleep 1
 python get-pip.py
-#pip install pyserial
-
 opkg install "python-numpy"
 opkg install sqlite3
 opkg install "python-sqlite3"

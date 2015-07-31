@@ -26,7 +26,7 @@ def init():
     print "initing"
     try:
     
-        stackconn = sqlite3.connect("/home/root/ProjectRidly/unified.db")
+        stackconn = sqlite3.connect("/home/root/Ridley/ProjectRidly/unified.db")
         sc = stackconn.cursor()
         #sc.execute('''DROP TABLE IF EXISTS stack''')
         query = str('''CREATE TABLE IF NOT EXISTS stack(id integer PRIMARY KEY AUTOINCREMENT, address integer, time timestamp, temp real, rh real, pressure real, type1 text, type2 text, adjusted1 real, adjusted2 real, raw1 real, raw2 real, unit1 text DEFAULT 'ppm', unit2 text DEFAULT'ppm' )''')                
@@ -175,7 +175,7 @@ def dbinsert(data):
 	  #Uncomment for transformed data 
         query2 =  '''INSERT INTO stack(address, time, rh, temp, pressure, type1, type2, adjusted1, adjusted2, raw1, raw2, unit1, unit2) VALUES ('%s', '%s', %s, %s, %s, '%s', '%s', %s, %s, %s, %s, '%s', '%s')'''  % (address, linetime, rh, temp, pressure, str(i['typeSensor1']), str(i['typeSensor2']), float(i['concentrationSensor1']), float(i['concentrationSensor2']),float(i['valueSensor1']),float(i['valueSensor2']), str(i['unit1']),str(i['unit2']))        
         try:
-            stackconn = sqlite3.connect('/home/root/ProjectRidly/unified.db') 
+            stackconn = sqlite3.connect('/home/root/Ridley/ProjectRidly/unified.db') 
             c = stackconn.cursor()
             #c.execute(query)               
             #conn.commit()        

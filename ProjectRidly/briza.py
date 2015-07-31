@@ -11,14 +11,35 @@ import sensor_init as s
 import time
 import Board as board
 import socket
+import os.path
+
+def init():
+    conn = sqlite3.connect("/home/root/Ridley/ProjectRidly/unified.db")#/usr/lib/edison_config_tools/public/unified.db")
+    c = conn.cursor()
+    
+    #with dbopen("/usr/lib/edison_config_tools/public/unified.db") as c:
+    #c = conn.cursor()
+    print "initing"
+    c.execute('''DROP TABLE IF EXISTS eeprom''')
+    c.execute('''CREATE TABLE eeprom (serial,addr,socket,type,sensitivity, baseline, span, offset,unit)''')
+    sensors = [('n/a',0x53, 'spec1', 'TOX',1,1,0,0,'ppb'),
+               ('n/a',0x53, 'spec2', 'TOR',1,1,0,0,'ppb'),
+                ('n/a',0x55, 'spec1', 'SO2',1,1,0,0,'ppb'),
+                ('n/a',0x55, 'spec2', 'H2S',1,1,0,0,'ppb'),
+                ('n/a',0x56, 'spec1', 'O3-',1,1,0,0,'ppb'),
+                ('n/a',0x56, 'spec2', 'NO2',1,1,0,0,'ppb'),
+                ('n/a',0x57, 'spec1', 'TOX',1,1,0,0,'ppb'),
+                ('n/a',0x57, 'spec2', 'CO-',1,1,0,0,'ppb')
+              ]
+    c.executemany('INSERT INTO eeprom VALUES (?,?,?,?,?,?,?,?,?)', sensors)       
+    c.execute('''DROP TABLE IF EXISTS calibrate''')
+    c.execute('''CREATE TABLE calibrate (id INTEGER PRIMARY KEY AUTOINCREMENT,'AAunit' TEXT DEFAULT 'ppb','ABunit' TEXT DEFAULT 'ppb','BAunit' TEXT DEFAULT 'ppb','BBunit' TEXT DEFAULT 'ppb','CAunit' TEXT DEFAULT 'ppb','CBunit' TEXT DEFAULT 'ppb','DAunit' TEXT DEFAULT 'ppb','DBunit' TEXT DEFAULT 'ppb','AAaddr' TEXT DEFAULT '87','AAsel' TEXT DEFAULT 'CO-', 'AA_sen' TEXT DEFAULT '10.02', 'AA_base' TEXT DEFAULT '16.76', 'AA_zero' TEXT DEFAULT '0', 'AA_span' TEXT DEFAULT '0.6', 'ABaddr' TEXT DEFAULT '87','ABsel' TEXT DEFAULT 'TOX', 'AB_sen' TEXT DEFAULT '-39.91', 'AB_base' TEXT DEFAULT '-0.18', 'AB_zero' TEXT DEFAULT '0', 'AB_span' TEXT DEFAULT '0', 'BAaddr' TEXT DEFAULT '86','BAsel' TEXT DEFAULT 'O3-', 'BA_sen' TEXT DEFAULT '-14.05', 'BA_base' TEXT DEFAULT '3.90', 'BA_zero' TEXT DEFAULT '0', 'BA_span' TEXT DEFAULT '0', 'BBaddr' TEXT DEFAULT '86','BBsel' TEXT DEFAULT 'NO2', 'BB_sen' TEXT DEFAULT '34.04', 'BB_base' TEXT DEFAULT '44.01', 'BB_zero' TEXT DEFAULT '0', 'BB_span' TEXT DEFAULT '1.2', 'CAaddr' TEXT DEFAULT '85','CAsel' TEXT DEFAULT 'SO2', 'CA_sen' TEXT DEFAULT '189.49', 'CA_base' TEXT DEFAULT '87.24', 'CA_zero' TEXT DEFAULT '0', 'CA_span' TEXT DEFAULT '0.3', 'CBaddr' TEXT DEFAULT '85', 'CBsel' TEXT DEFAULT 'H2S', 'CB_sen' TEXT DEFAULT '-49.51', 'CB_base' TEXT DEFAULT '3.33', 'CB_zero' TEXT DEFAULT '0', 'CB_span' TEXT DEFAULT '0', 'DAaddr' TEXT DEFAULT '83', 'DAsel' TEXT DEFAULT 'TOX', 'DA_sen' TEXT DEFAULT '15.37', 'DA_base' TEXT DEFAULT '161.41', 'DA_zero' TEXT DEFAULT '0', 'DA_span' TEXT DEFAULT '0', 'DBaddr' TEXT DEFAULT '83',  'DBsel' TEXT DEFAULT 'TOR', 'DB_sen' TEXT DEFAULT '15.37', 'DB_base' TEXT DEFAULT '161.41', 'DB_zero' TEXT DEFAULT '0', 'DB_span' TEXT DEFAULT '0')''')  
+    c.execute('INSERT INTO calibrate (id) VALUES (1)')
+    be.commit2eeprom    
+    conn.commit()        
+    conn.close()  
 
 
-sen1 = '1'
-sen2 = '2'
-s1 = ''
-s2 = ''
-board_addr = board.boards()#
-addrs = []
 
 ##########################################################
 ##read calibration parameters from sensor module eeprom##
@@ -30,10 +51,12 @@ def calibrate(board_addr):
     #try:       
     for i in range(len(board_addr)):            
         parameters[board_addr[i]] = {"spec1": eeprom.realSensorData(board_addr[i],1), "spec2": eeprom.realSensorData(board_addr[i],2)}
-    print parameters
+    #print parameters
     return parameters        
     
 def dbcalibrate(addresses):
+    spec1 = []
+    spec2 = []    
     be.ui2eepromTransfer()    
     parameters = {}
     conn = sqlite3.connect("/home/root/Ridley/ProjectRidly/unified.db")#/usr/lib/edison_config_tools/public/unified.db")
@@ -44,15 +67,15 @@ def dbcalibrate(addresses):
         spec1 = c.fetchone()        
         
         #print "SPEC1"
-        print spec1        
+        #print spec1        
         c.execute("SELECT * FROM eeprom WHERE addr = %i AND socket = 'spec2'" % addresses[i])
         spec2 = c.fetchone()
-        print spec2        
-        parameters[addresses[i]] = {"spec1": [str(spec1[3]),str(spec1[6]), str(spec1[7]),str(spec1[4]), str(spec1[5]),str(spec1[8])],"spec2": [str(spec2[3]),str(spec2[6]), str(spec2[7]),str(spec2[4]), str(spec2[5]),str(spec2[8])]}
-    print parameters
+        #print spec2        
+        parameters[addresses[i]] = {"spec1": [str(spec1[3]),str(spec1[4]), str(spec1[5]),str(spec1[6]), str(spec1[7]),str(spec1[8])],"spec2": [str(spec2[3]),str(spec2[4]), str(spec2[5]),str(spec2[6]), str(spec2[7]),str(spec2[8])]}
+   # print parameters
     conn.close()
         #parameters[addr] = {}
-    print parameters            
+   # print parameters            
     #conn.close()
     return parameters
 
@@ -118,7 +141,7 @@ def transform(temperature, nA, sensitivity, baseline, zero, span, type1):
     print type1, nA
     nazt = baseline+zero*temperature-20
     nact = nA - nazt
-    print str("1/float*"+str(sensitivity)+"*"+str(nact)+"*"+str("(1-float("+str(span)+"*"+str(temperature)+"-20"))    
+    print str("NA: " + str(nA) + "Baseline: " +  str(baseline) + "Sensitivity: " + str(sensitivity)+" NACT: "+str(nact)+"*"+str("Span: "+str(span)+" Temperature: "+str(temperature)+"-20"))    
     concentration=(1/sensitivity)*nact*(1-span*(temperature-20))
     #concentration=abs(concentration)
     return concentration
@@ -151,7 +174,7 @@ def readSensors(boardAdr, s1, s2, cvals):
         
         time.sleep(0.4)
         time.sleep(0.39)   
-        print cvals
+        #print cvals
         type1 = str(cvals[boardAdr]['spec1'][0])
         type2 = str(cvals[boardAdr]['spec2'][0])
         sensitivity1 = float(cvals[boardAdr]['spec1'][1])
@@ -190,11 +213,11 @@ def writeSocket(dataline):
 def main():
     types = {}
     board_addr = board.boards()
-    print board_addr
+    #print board_addr
     for i in range(len(board_addr)): 
         s1, s2 = board.board_init(board_addr[i])
         addr = board_addr[i]       
-        print s1, s2
+        #print s1, s2
         types[addr] = str(s1), str(s2)
         #print types[addr]
     #init()
@@ -230,7 +253,19 @@ def main():
         #    iteration = 0
     
 if __name__ =="__main__":
+    if os.path.isfile("/home/root/Ridley/ProjectRidly/unified.db") == True:
+        print "DB FOUND"        
+        pass
+    else:
+        init()
+    sen1 = '1'
+    sen2 = '2'
+    s1 = ''
+    s2 = ''
 
+    board_addr = board.boards()#
+
+    addrs = []
     HOST = 'localhost' 
     PORT = 50007 
     PORT2 = 50008
