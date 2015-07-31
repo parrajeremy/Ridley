@@ -8,7 +8,7 @@ print 'Address of the boards :', len(sys.argv)-1, 'boards.'
 #print 'Address list:', str(sys.argv)
 boards = board.boards()
 def init():
-    conn = sqlite3.connect("/home/root/ProjectRidly/unified.db")#/usr/lib/edison_config_tools/public/unified.db")
+    conn = sqlite3.connect("/home/root/Ridley/ProjectRidly/unified.db")#/usr/lib/edison_config_tools/public/unified.db")
     c = conn.cursor()
     
     #with dbopen("/usr/lib/edison_config_tools/public/unified.db") as c:
@@ -36,7 +36,7 @@ def init():
 
     
 def ui2eepromTransfer():
-    conn = sqlite3.connect("/home/root/ProjectRidly/unified.db")#/usr/lib/edison_config_tools/public/unified.db")
+    conn = sqlite3.connect("/home/root/Ridley/ProjectRidly/unified.db")#/usr/lib/edison_config_tools/public/unified.db")
     c = conn.cursor()
 
     print "ui2eeprom"
@@ -67,7 +67,7 @@ def ui2eepromTransfer():
 def eeprom2uiTransfer():
     #with dbopen("/usr/lib/edison_config_tools/public/unified.db") as c:
    # c = conn.cursor()
-    conn = sqlite3.connect("/home/root/ProjectRidly/unified.db")#/usr/lib/edison_config_tools/public/unified.db")
+    conn = sqlite3.connect("/home/root/Ridley/ProjectRidly/unified.db")#/usr/lib/edison_config_tools/public/unified.db")
     c = conn.cursor()
     print "eeprom2ui"
     addresses = board.boards()
@@ -94,7 +94,7 @@ def eeprom2uiTransfer():
     conn.close()
     
 def commit2eeprom():
-        conn = sqlite3.connect("/home/root/ProjectRidly/unified.db")#/usr/lib/edison_config_tools/public/unified.db")
+        conn = sqlite3.connect("/home/root/Ridley/ProjectRidly/unified.db")#/usr/lib/edison_config_tools/public/unified.db")
         c = conn.cursor()
         board_addr = board.boards()
         

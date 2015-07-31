@@ -4,8 +4,8 @@ After=bluetooth.service
 [Service]
 Type=simple
 RemainAfterExit=true
-ExecStart=/home/root/Briza/brizastartup.sh
-Environment="HOME=/home/root/Briza/"
-WorkingDirectory=/home/root/Briza/
+ExecStart=/home/root/Ridley/ProjectRidley/brizastartup.sh
+Environment="HOME=/home/root/Ridley/"
+WorkingDirectory=/home/root/Ridley/
 [Install]
 WantedBy=multi-user.target

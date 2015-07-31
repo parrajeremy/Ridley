@@ -6,5 +6,5 @@ Created on Mon Jul 27 14:04:29 2015
 """
 
 import os
-os.system('killall python /home/root/ProjectRidly/*')
+os.system('killall python /home/root/Ridley/ProjectRidly/*')
 

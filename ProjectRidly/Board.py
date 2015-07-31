@@ -75,7 +75,7 @@ def board_init(boardAddr):
 #board_init(0x57)
             
 def boards(): 
-    conn = sqlite3.connect("/home/root/ProjectRidly/unified.db")#/usr/lib/edison_config_tools/public/unified.db")
+    conn = sqlite3.connect("/home/root/Ridley/ProjectRidly/unified.db")#/usr/lib/edison_config_tools/public/unified.db")
     c = conn.cursor()
     #with dbopen("/usr/lib/edison_config_tools/public/unified.db") as c:
     #c = conn.cursor()

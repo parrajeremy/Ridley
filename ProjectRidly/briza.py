@@ -11,9 +11,7 @@ import sensor_init as s
 import time
 import Board as board
 import socket
-import os
-import subprocess
-import sys
+
 
 sen1 = '1'
 sen2 = '2'
@@ -38,7 +36,7 @@ def calibrate(board_addr):
 def dbcalibrate(addresses):
     be.ui2eepromTransfer()    
     parameters = {}
-    conn = sqlite3.connect("/home/root/ProjectRidly/unified.db")#/usr/lib/edison_config_tools/public/unified.db")
+    conn = sqlite3.connect("/home/root/Ridley/ProjectRidly/unified.db")#/usr/lib/edison_config_tools/public/unified.db")
     c = conn.cursor()
     for i in range(len(addresses)): 
 

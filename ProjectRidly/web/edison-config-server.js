@@ -20,7 +20,7 @@ var mimeTypes = {'html': 'text/html',
                  'png': 'image/png',
                  'js': 'text/javascript', 
                  'css': 'text/css'};
-var db = new sqlite3.Database('/home/root/ProjectRidly/unified.db');	
+var db = new sqlite3.Database('/home/root/Ridley/ProjectRidly/unified.db');	
 var dbInsertStmt = db.prepare(' UPDATE calibrate SET AAunit=?, ABunit=?, BAunit=?, BBunit=? ,CAunit=?, CBunit=?,DAunit=?, DBunit=?, AAsel=?, AA_sen=?, AA_base=?, AA_zero=?, AA_span=?, ABsel=?, AB_sen=?, AB_base=?, AB_zero=?, AB_span=?, BAsel=?, BA_sen=?, BA_base=?, BA_zero=?, BA_span=?, BBsel=?, BB_sen=?, BB_base=?, BB_zero=?, BB_span=?, CAsel=?, CA_sen=?, CA_base=?, CA_zero=?, CA_span=?, CBsel=?, CB_sen=?, CB_base=?, CB_zero=?, CB_span=?, DAsel=?, DA_sen=?, DA_base=?, DA_zero=?,DA_span=?, DBsel=?, DB_sen=?, DB_base=?, DB_zero=?,DB_span=? WHERE id=1');
 var dbSelectStmt = db.prepare('SELECT AAunit, ABunit, BAunit, BBunit, CAunit, CBunit, DAunit, DBunit, AAsel, AA_sen, AA_base, AA_zero, AA_span, ABsel, AB_sen, AB_base, AB_zero, AB_span, BAsel,  BA_sen, BA_base, BA_zero, BA_span, BBsel, BB_sen, BB_base, BB_zero, BB_span, CAsel, CA_sen, CA_base, CA_zero, CA_span, CBsel, CB_sen, CB_base, CB_zero, CB_span, DAsel, DA_sen, DA_base, DA_zero, DA_span, DBsel, DB_sen, DB_base, DB_zero, DB_span FROM calibrate ORDER BY id DESC');
 //Edit db2SelectStmt limit to adjust amount of data shown on charts
