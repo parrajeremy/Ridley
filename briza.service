@@ -1,0 +1,11 @@
+[Unit]
+Description=Briza
+After=bluetooth.service
+[Service]
+Type=simple
+RemainAfterExit=true
+ExecStart=/home/root/Briza/brizastartup.sh
+Environment="HOME=/home/root/Briza/"
+WorkingDirectory=/home/root/Briza/
+[Install]
+WantedBy=multi-user.target

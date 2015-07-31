@@ -1,0 +1,188 @@
+import mraa as m
+import pca9557 as pca
+import briza_eeprom as b_eeprom 
+import hdc1000 as hdc
+import LPS25H as lph
+import data_calc as dc
+import lmp91000 as lmp
+import ads1220 as ads
+import populate_sensor_data as sd
+import EEPROM as eeprom
+import sensor_init as s
+import time as t
+import Board as board
+import socket
+import sqlite3
+
+
+
+def dict_gen(curs):
+    ''' From Python Essential Reference by David Beazley
+    '''
+    import itertools
+    field_names = [d[0].lower() for d in curs.description]
+    while True:
+        rows = curs.fetchmany()
+        if not rows: return
+        for row in rows:
+            yield dict(itertools.izip(field_names, row))
+
+
+HOST = 'localhost' 
+PORT = 50007 
+conn = sqlite3.connect('/usr/lib/edison_config_tools/public/calibrate.db')   
+c = conn.cursor()
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+c.execute('SELECT * FROM calibrate WHERE id=1')
+vals = c.fetchone()
+print len(vals)
+print vals
+#vals = [tup[1] for tup in cvals]
+cvals = {}
+#vals = dict_gen(c.execute('SELECT * FROM calibrate WHERE id=1'))
+#cvals = cvals.tolist()
+#print vals[]
+#cvals['CO-'] = ['%s' % str(num) for num in vals[1:5]] #calibration values dictionary '{Sensor_Type: sensitivity, baseline, zero, span}
+#cvals['NO2'] = ['%s' % str(num) for num in vals[5:9]]
+#cvals['O3-'] = ['%s' % str(num) for num in vals[9:13]]
+#cvals['SO2'] = ['%s' % str(num) for num in vals[13:17]]
+#cvals['H2S'] = ['%s' % str(num) for num in vals[17:21]]
+#cvals['TOX'] = ['%s' % str(num) for num in vals[21:25]]
+#cvals['TOR'] = ['%s' % str(num) for num in vals[25:29]]
+#print cvals
+cvals = {'CO-': [10.6, 12.03, 2.375, 0.4], 'NO2': [-33.12, -0.11, -1.6, 0.4], 'O3-': [-21.17, 4.99, 0, 0.5], 'SO2': [29.22, 33.34, 15, 0.5], 'H2S': [175.17, 110.17, 0,0], 'TOR': [-47.69,0.95, 0, 0], 'TOX': [9.13, 105.94, 0, 0]}
+#cvals = {'CO-': [10.6, 12.03, 0, 0.6], 'NO2': [-33.12, -0.11, 0, 0], 'O3-': [-21.17, 4.99, 0, 0], 'SO2': [29.22, 33.34, 0, 1.2], 'H2S': [175.17, 110.17, 0,0.3], 'TOR': [-47.69,0.95, 0, 0], 'TOX': [9.13, 105.94, 0, 0]}
+print len(vals)
+#initilization of the eeprom is done usinf file briza_eerpom.py
+board_addr = [b_eeprom.board1,b_eeprom.board2,b_eeprom.board3,b_eeprom.board4]
+print board_addr
+
+#sen1 ='1' 
+#sen2 ='2'
+types = {}
+
+for i in range(len(board_addr)):
+	addr = board_addr[i]
+	s1, s2 = board.board_init(board_addr[i])
+	print s1, s2
+        types[addr] = str(s1), str(s2)
+print types
+
+#configuring other sensors on the board like : humidity, tem, pressure
+lph.configure()
+
+
+def other_sensor():
+    humidity = hdc.readHDC_humidity()
+    temperature = hdc.readHDC_temp()
+    pressure = lph.getPressure()
+    return temperature, humidity, pressure
+
+#configuring the on board sensor configuration
+def sensor1(i):
+    pca.pca_config(1,0,0)
+    s.init(s1[i])
+    lmp.lmp_init()
+    ads.spi_init()
+    pca.pca_config(1,1,1) 
+
+
+def conf_sensor1():
+    #print("sensor 1:")
+    pca.pca_config(1,0,0)
+    dc.s1_avg_data()
+    sensor1Data = ads.get_readData()
+    s1_avg = dc.get_s1Avg()
+    pca.pca_config(1,1,1)
+    return s1_avg
+
+def sensor2(s2):
+    pca.pca_config(0,1,0)
+    s.init(s2)
+    lmp.lmp_init()
+    ads.spi_init()
+    pca.pca_config(1,1,1)
+
+def conf_sensor2():
+    #print("sensor 2:")
+    pca.pca_config(0,1,0)
+    dc.s2_avg_data()
+    sensor2Data = ads.get_readData()
+    s2_avg = dc.get_s2Avg()
+    pca.pca_config(1,1,1)
+    return s2_avg
+
+
+def transform(temperature, rawvalue, sensitivity, baseline, zero, span):
+    print temperature, rawvalue, sensitivity, baseline, zero, span
+    nA = float(rawvalue/1425.40783)  ###rawvalue * 2.048 / 8388607 / 348000 * 1000000000#
+    nazt = (float(float(baseline)+float(zero)*(temperature-20)))
+    nact = float(nA - nazt)
+    concentration=abs((1/float(sensitivity))*nact*((1-float(span))*temperature-20))
+#    print nazt
+#    print nact
+#   print nA    
+    print str("Concentration: " + str(concentration))
+    return concentration
+def load_board(boardAdr, s1, s2):
+	temperature, humidity, pressure = other_sensor()
+	board.call_pca(boardAdr)
+        #t.sleep(0.4)
+        ts = t.time()
+        #t.sleep(0.4)
+        #print ts,
+        #t.sleep(0.4)
+        ads.get_ads_config0(0x70)
+        #t.sleep(0.4)
+        #print "sensor 1"
+        conf_sensor1()
+        #t.sleep(0.4)
+        ads.get_ads_config0(0x60)
+        #t.sleep(0.4)
+        #print "sensor2"
+        conf_sensor2()
+        #t.sleep(0.4)
+        #t.sleep(0.39)
+	stype1 = str(types[boardAdr][0])
+        stype2 = str(types[boardAdr][1])
+        val1 = conf_sensor1()
+        val2 = conf_sensor2()
+        sensitivity1 = cvals[stype1][0]
+        baseline1 = cvals[stype1][1]
+        zero1 = cvals[stype1][2]
+        span1 = cvals[stype1][3]
+        sensitivity2 = cvals[stype2][0]
+        baseline2 = cvals[stype2][1]
+        zero2 = cvals[stype2][2]
+        span2 = cvals[stype2][3]
+        
+        con1 = transform(temperature, val1, sensitivity1, baseline1, zero1, span1)
+        con2 = transform(temperature, val2, sensitivity2, baseline2, zero2, span2)
+	dataline.append({"temperature": temperature, "humidity": humidity, "pressure": pressure, "address": boardAdr, "typeSensor1": types[boardAdr][0], "valueSensor1": str(con1), "typeSensor2":types[boardAdr][1], "valueSensor2": str(con2)})
+
+	#dataline.append({"temperature": temperature, "humidity": humidity, "pressure": pressure, "address": boardAdr, "typeSensor1": types[boardAdr][0], "valueSensor1": str(int(conf_sensor1())) , "typeSensor2":types[boardAdr][1], "valueSensor2": str(int(conf_sensor2()))})
+    	#print dataline
+    	return dataline
+
+
+
+
+while 1==1:
+#     other_sensor()
+#    t.sleep(0.1)
+	dataline = []
+	for i in range(len(board_addr)):
+		print "\n Board %s" %i
+     		#board.reading_eeprom(board_addr[i])
+		load_board(board_addr[i], s1, s2)
+    	try:
+		sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+		sock.connect((HOST,PORT))
+		sock.send(str(dataline)	)
+        	sock.close()
+		#dataline = []          
+   	except Exception, e:
+		print e
+		pass
+
+     		
