@@ -1,10 +1,10 @@
-[Unit]
+I[Unit]
 Description=Edison PWR button handler###
 
 [Service]
-ExecStart=/usr/bin/pwr_button_handler "/bin/systemctl start blink-led" "sh -c \"/bin/systemctl stop blink-led && /home/root/Ridley/ProjectRidly/brizastartup.sh\""
+ExecStart=/usr/bin/pwr_button_handler "/bin/systemctl start blink-led" "sh -c \"/bin/systemctl stop blink-led && /home/root/Ridley/ProjectRidly/brizastartup.sh""
 Restart=on-failure
 
 [Install]
 WantedBy=default.target
-
+/Users/replicant/Ridley/ProjectRidly/system/briza.service
