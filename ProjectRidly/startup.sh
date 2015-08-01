@@ -5,8 +5,8 @@ echo "src/gz core2-32 http://repo.opkg.net/edison/repo/core2-32" > /etc/opkg/bas
 echo "src mraa-upm http://iotdk.intel.com/repos/1.1/intelgalactic" > /etc/opkg/mraa-upm.conf
 opkg update
 opkg upgrade
-git clone https://github.com/isclayton/Ridley.git
 opkg install git
+git clone https://github.com/isclayton/Ridley.git
 echo "src mraa-upm http://iotdk.intel.com/repos/1.1/intelgalactic-dev" > /etc/opkg/mraa-upm.conf 
 opkg update 
 opkg install libmraa0 
@@ -27,13 +27,16 @@ chmod +x  /usr/lib/edison_config_tools/edison-config-server.js
 chmod +x  /usr/lib/edison_config_tools/public/dbint.js
 chmod +x /home/root/Ridley/ProjectRidly/brizastartup.sh
 chmod +x /home/root/Ridley/ProjectRidly/sense.sh
+python /home/root/Ridley/ProjectRidly/sensesock.py
+python /home/root/Ridley/ProjectRidly/briza.py
+sleep 2
+python /home/root/Ridley/ProjectRidly/stop_service.py
 #python /home/root/Ridley/ProjectRidly/briza_eeprom.py
 systemctl daemon-reload
 systemctl disable edison_config.service
 systemctl disable pwr-button-handler.service
 systemctl enable pwr-button-handler.service
 systemctl enable briza.service
-systemctl 
-system
-#reboot
+
+reboot
 

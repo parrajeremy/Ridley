@@ -87,7 +87,7 @@ def boards():
         addrs.append(addr)
     return addrs
     
-#if __name__ =="__main__":
+#f __name__ =="__main__":
     
 board_addr = boards()
 
