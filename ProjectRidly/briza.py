@@ -1,6 +1,6 @@
 import sqlite3
 import pca9557 as pca
-import briza_eeprom as be 
+#mport briza_eeprom as be 
 import hdc1000 as hdc
 import LPS25H as lph
 import data_calc as dc
@@ -9,7 +9,7 @@ import ads1220 as ads
 import EEPROM as eeprom
 import sensor_init as s
 import time
-import Board as board
+#mport Board as board
 import socket
 import os.path
 
@@ -35,10 +35,11 @@ def init():
     c.execute('''DROP TABLE IF EXISTS calibrate''')
     c.execute('''CREATE TABLE calibrate (id INTEGER PRIMARY KEY AUTOINCREMENT,'AAunit' TEXT DEFAULT 'ppb','ABunit' TEXT DEFAULT 'ppb','BAunit' TEXT DEFAULT 'ppb','BBunit' TEXT DEFAULT 'ppb','CAunit' TEXT DEFAULT 'ppb','CBunit' TEXT DEFAULT 'ppb','DAunit' TEXT DEFAULT 'ppb','DBunit' TEXT DEFAULT 'ppb','AAaddr' TEXT DEFAULT '87','AAsel' TEXT DEFAULT 'CO-', 'AA_sen' TEXT DEFAULT '10.02', 'AA_base' TEXT DEFAULT '16.76', 'AA_zero' TEXT DEFAULT '0', 'AA_span' TEXT DEFAULT '0.6', 'ABaddr' TEXT DEFAULT '87','ABsel' TEXT DEFAULT 'TOX', 'AB_sen' TEXT DEFAULT '-39.91', 'AB_base' TEXT DEFAULT '-0.18', 'AB_zero' TEXT DEFAULT '0', 'AB_span' TEXT DEFAULT '0', 'BAaddr' TEXT DEFAULT '86','BAsel' TEXT DEFAULT 'O3-', 'BA_sen' TEXT DEFAULT '-14.05', 'BA_base' TEXT DEFAULT '3.90', 'BA_zero' TEXT DEFAULT '0', 'BA_span' TEXT DEFAULT '0', 'BBaddr' TEXT DEFAULT '86','BBsel' TEXT DEFAULT 'NO2', 'BB_sen' TEXT DEFAULT '34.04', 'BB_base' TEXT DEFAULT '44.01', 'BB_zero' TEXT DEFAULT '0', 'BB_span' TEXT DEFAULT '1.2', 'CAaddr' TEXT DEFAULT '85','CAsel' TEXT DEFAULT 'SO2', 'CA_sen' TEXT DEFAULT '189.49', 'CA_base' TEXT DEFAULT '87.24', 'CA_zero' TEXT DEFAULT '0', 'CA_span' TEXT DEFAULT '0.3', 'CBaddr' TEXT DEFAULT '85', 'CBsel' TEXT DEFAULT 'H2S', 'CB_sen' TEXT DEFAULT '-49.51', 'CB_base' TEXT DEFAULT '3.33', 'CB_zero' TEXT DEFAULT '0', 'CB_span' TEXT DEFAULT '0', 'DAaddr' TEXT DEFAULT '83', 'DAsel' TEXT DEFAULT 'TOX', 'DA_sen' TEXT DEFAULT '15.37', 'DA_base' TEXT DEFAULT '161.41', 'DA_zero' TEXT DEFAULT '0', 'DA_span' TEXT DEFAULT '0', 'DBaddr' TEXT DEFAULT '83',  'DBsel' TEXT DEFAULT 'TOR', 'DB_sen' TEXT DEFAULT '15.37', 'DB_base' TEXT DEFAULT '161.41', 'DB_zero' TEXT DEFAULT '0', 'DB_span' TEXT DEFAULT '0')''')  
     c.execute('INSERT INTO calibrate (id) VALUES (1)')
-    be.commit2eeprom    
+        
     conn.commit()        
     conn.close()  
-
+    import briza_eeprom as be
+    be.commit2eeprom
 
 
 ##########################################################
@@ -55,6 +56,7 @@ def calibrate(board_addr):
     return parameters        
     
 def dbcalibrate(addresses):
+    import briza_eeprom as be 
     spec1 = []
     spec2 = []    
     be.ui2eepromTransfer()    
@@ -258,6 +260,7 @@ if __name__ =="__main__":
         pass
     else:
         init()
+    import Board as board
     sen1 = '1'
     sen2 = '2'
     s1 = ''

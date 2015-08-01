@@ -1,7 +1,7 @@
 import mraa as m
 import populate_sensor_data as sd
 import sys
-import Board as board
+#mport Board as board
 import sqlite3
 import EEPROM as e
 print 'Address of the boards :', len(sys.argv)-1, 'boards.'
@@ -145,8 +145,9 @@ def convert_hex(boardNo):
 #print board3
 #print board4
 if __name__ =="__main__":
+    import Board as board
     boards = board.boards()
-
+	
     sd.board1DataInit(boards[0])
     sd.board2DataInit(boards[1])
     sd.board3DataInit(boards[2])
