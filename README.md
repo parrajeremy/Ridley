@@ -1,2 +1,4 @@
 
-[a link](https://github.com/isclayton/Ridley/Briza Setup Guide.pdf)
+Setup:
+
+  Read guide [here](https://github.com/isclayton/Ridley/Briza Setup.pdf)
