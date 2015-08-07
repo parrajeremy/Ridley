@@ -145,7 +145,9 @@ def convert_hex(boardNo):
 #print board3
 #print board4
 if __name__ =="__main__":
+    
     import Board as board
+    init()
     boards = board.boards()
 	
     sd.board1DataInit(boards[0])
