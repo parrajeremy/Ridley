@@ -21,10 +21,10 @@ def init():
                ('n/a',0x53, 'spec2', 'TOR',1,1,0,0,'ppb'),
                 ('n/a',0x55, 'spec1', 'SO2',1,1,0,0,'ppb'),
                 ('n/a',0x55, 'spec2', 'H2S',1,1,0,0,'ppb'),
-                ('n/a',0x56, 'spec1', 'O3-',1,1,0,0,'ppb'),
-                ('n/a',0x56, 'spec2', 'NO2',1,1,0,0,'ppb'),
-                ('n/a',0x57, 'spec1', 'TOX',1,1,0,0,'ppb'),
-                ('n/a',0x57, 'spec2', 'CO-',1,1,0,0,'ppb')
+                ('n/a',0x56, 'spec1', 'NO2',1,1,0,0,'ppb'),
+                ('n/a',0x56, 'spec2', 'O3-',1,1,0,0,'ppb'),
+                ('n/a',0x57, 'spec1', 'CO-',1,1,0,0,'ppb'),
+                ('n/a',0x57, 'spec2', 'TOX',1,1,0,0,'ppb')
               ]
     c.executemany('INSERT INTO eeprom VALUES (?,?,?,?,?,?,?,?,?)', sensors)       
     c.execute('''DROP TABLE IF EXISTS calibrate''')
