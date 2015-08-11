@@ -135,7 +135,7 @@ def SO2():
     lmp.get_INTZSEL(0x20)
     lmp.get_REFVOLTAGE(0x80)
    # print "At SO2 Bias"
-    lmp.get_BIAS(0x01)
+    lmp.get_BIAS(0x06)
     lmp.get_BIAS_SIGN(0x10)
     lmp.get_ADC_GAIN(0x0A)
     ads.get_ads_config0(0x64)
