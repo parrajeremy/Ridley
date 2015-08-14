@@ -221,8 +221,10 @@ def readSensors(boardAdr, s1, s2, cvals):
         unit1 = cvals[boardAdr]['spec1'][5]
         unit2 = cvals[boardAdr]['spec2'][5]
         #print val1, val2        
-        con1 = transform(temperature, val1, sensitivity1, baseline1, zero1, span1, type1)
-        con2 = transform(temperature, val2, sensitivity2, baseline2, zero2, span2, type2)
+        #con1 = transform(temperature, val1, sensitivity1, baseline1, zero1, span1, type1)
+        #con2 = transform(temperature, val2, sensitivity2, baseline2, zero2, span2, type2)
+        con1 = val1
+        con2 = val2
         print str("Concentration " + str(type1)+ ":" + str(con1)+", " + "Concentration " + str(type2)+ ":" + str(con2))
         #if boardAdr=='87':
         dataline = {"temperature": temperature, "humidity": humidity, "pressure": pressure, "address": boardAdr, "typeSensor1": str(str(type1)+"("+str(boardAdr)+")"), "valueSensor1": val1, "concentrationSensor1": str(con1),  "unit1": str(unit1), "typeSensor2":str(str(type2)+"("+str(boardAdr)+")"), "valueSensor2": val2, "unit2": str(unit2), "concentrationSensor2": str(con2)}
