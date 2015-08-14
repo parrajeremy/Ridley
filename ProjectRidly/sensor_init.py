@@ -10,12 +10,6 @@ def init(sensor):
     if sensor == 'TOR':
        # print"TOR"
         Tor()
-    elif sensor == 'TOX':
-        #print"TOX"
-        Tox()
-    elif sensor == 'NO2':
-        #print"NO2"
-        NO2()
     elif sensor == 'O3-':
         #print"O3"
         O3()
@@ -28,6 +22,13 @@ def init(sensor):
     elif sensor == 'H2S':
         #print"H2S"
         H2S()
+    elif sensor == 'TOX':
+        #print"TOX"
+        Tox()
+    elif sensor == 'NO2':
+        #print"NO2"
+        NO2()
+
 
     #lmp.lmp_init()
     #ads.spi_init()
@@ -67,7 +68,7 @@ def Tor():
 
 
 def CO():
-#    print("Configuring parameters for the CO")
+    print("Configuring parameters for the CO")
     lmp.get_OPMODE(0x03)
     lmp.get_TIAGAIN(0x00)
     lmp.get_RLOAD(0x00)
@@ -82,7 +83,7 @@ def CO():
     ads.get_ads_config3(0x00)
 
 def O3():
-#    print("Configuring parameters for the O3")
+    print("Configuring parameters for the O3")
     lmp.get_OPMODE(0x03)
     lmp.get_TIAGAIN(0x00)
     lmp.get_RLOAD(0x00)
@@ -97,7 +98,7 @@ def O3():
     ads.get_ads_config3(0x00)
 
 def NO2():
-#    print("Configuring parameters for the NO2")
+    print("Configuring parameters for the NO2")
     lmp.get_OPMODE(0x03)
     lmp.get_TIAGAIN(0x00)
     lmp.get_RLOAD(0x00)
@@ -128,7 +129,7 @@ def H2S():
     ads.get_ads_config3(0x00)
 
 def SO2():
-#    print("Configuring parameters for the SO2")
+    print("Configuring parameters for the SO2")
     lmp.get_OPMODE(0x03)
     lmp.get_TIAGAIN(0x00)
     lmp.get_RLOAD(0x00)

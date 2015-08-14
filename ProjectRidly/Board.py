@@ -1,6 +1,6 @@
 import mraa as m
 import pca9557 as pca
-import briza_eeprom as b_eeprom 
+import briza_eeprom_v3 as b_eeprom 
 import hdc1000 as hdc
 import LPS25H as lph
 import data_calc as dc
@@ -15,31 +15,34 @@ import sqlite3
 
 #[b_eeprom.board1, b_eeprom.board2, b_eeprom.board3, b_eeprom.board4]
 
-#global board_addr
+
 
 def reading_eeprom(boardAddr):
     global sen1, sen2
     eeprom.init_EEPROM(boardAddr)
     
     se1 = eeprom.readSensorQRData(1)
+#
     sen1 = eeprom.data[9:12]
 
     se2 = eeprom.readSensorQRData(2)
     sen2 = eeprom.data[9:12]
 
-def call_pca(boardAddr):    
-    if boardAddr == board_addr[0]:
+def call_pca(boardAddr):   
+    global boards
+    #print boards
+    if boardAddr == boards[0]:
         pca.pca_init(0x1B)
-#        print "ON PCA : 0x1B"
-    elif boardAddr == board_addr[1]:
+        print "ON PCA : 0x1B"
+    elif boardAddr == boards[1]:
         pca.pca_init(0x1D)
- #       print "ON PCA : 0x1D"
-    elif boardAddr == board_addr[2]:
+        print "ON PCA : 0x1D"
+    elif boardAddr == boards[2]:
         pca.pca_init(0x1E)
-  #      print "ON PCA : 0x1E"
-    elif boardAddr == board_addr[3]:
+        print "ON PCA : 0x1E"
+    elif boardAddr == boards[3]:
         pca.pca_init(0x1F)
-   #     print "ON PCA : 0x1F"
+        print "ON PCA : 0x1F"
     else:
         print("please initialize the board in populate_sensor_board.py")
 
@@ -60,18 +63,19 @@ def sensor2(s2):
 
 def board_init(boardAddr):
     global s1, s2
+    
     reading_eeprom(boardAddr)
     call_pca(boardAddr)
     s1 = str(sen1)
     s2 = str(sen2)
-#    print s1
-#    print s2
+    #print s1
+    #   print s2
     sensor1(s1)
     sensor2(s2)
     return s1, s2
 #board_init(0x57)
             
-def boards(): 
+def dbBoards(): 
         
     conn = sqlite3.connect("/home/root/Ridley/ProjectRidly/unified.db")#/usr/lib/edison_config_tools/public/unified.db")
     c = conn.cursor()
@@ -87,7 +91,7 @@ def boards():
         addrs.append(addr)
     return addrs
     
-#f __name__ =="__main__":
-    
-board_addr = boards()
-
+boards = dbBoards()   
+#if __name__ =="__main__":
+#    boards = dbBoards()
+#    board_init(boards)

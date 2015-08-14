@@ -36,13 +36,14 @@ def readPage(page):
                 data.insert(i+1, i+1)
 
 def strip_non_ascii(string):
-	strippedData = ''
-	for i in string:
-        	if(i < '~'):
-                	strippedData = strippedData + str(unichr(i))
-		else:
-			print i
-	return strippedData
+    strippedData = ''
+    #print string	
+    for i in string:
+        if(i < '~'):
+            strippedData = strippedData + str(unichr(i))
+        else:
+		print i
+    return strippedData
 
 def writeSensorData(board, slot, sensorData):
 	eeprom = m.I2c(1)
@@ -71,27 +72,29 @@ def writeSensorRawData(board, slot, sensorData):
 	for i in range(0, numPages + 1):
 		indexPointer = i * (PAGE_SIZE - 1) 
 		rawData = sensorData[indexPointer : indexPointer + PAGE_SIZE - 1]
-#		print "rawData: %s" %rawData
+		#print "rawData: %s" %rawData
 		stringarray = bytearray(rawData)
 		writeSensorData(0, (slot + i), stringarray)
 
 ######## Read real calibraation parameters
 def realSensorData(board,slot):
+        print board, slot        
         init_EEPROM(board)
         rawQR = strip_non_ascii(readSensorQRData(slot)[1]).strip(',').split(',')
         rawQR[7]=rawQR[7][0:3]
         rawQR=rawQR[2:8]
-        #print rawQR        
+        print "QR CODE"        
+        print rawQR        
         return rawQR
 
 def readSensorData(board, slot):
-        #print board, slot
+        print board, slot
         eeprom = m.I2c(1)
         eeprom.frequency(350000)
         eeprom.address(EEPROM_ADDR)
 	
         dataPointer = (slot * PAGE_SIZE)
-#        print "dataPointer for board: %d, slot %d = %d" %(board, slot, dataPointer)
+        #print "dataPointer for board: %d, slot %d = %d" %(board, slot, dataPointer)
 
 	temp = bytearray([dataPointer])
 	eeprom.write(temp)
@@ -118,8 +121,9 @@ def readSensorRawData(board, slot):
 	sensorRawData = ''
         for i in range(0, 3):
 		sensorRawData = sensorRawData + readSensorData(0, (slot + i))
-#		print "readData = %s" %sensorRawData
+		#print "readData = %s" %sensorRawData
 	data = str(sensorRawData)
+      #print data
 	return sensorRawData
 
 def convertToByteArray(string):
@@ -182,7 +186,7 @@ def testProgram():
 	writeSensorRawData(0, SENSOR2_RAW_ADDR, sensor2raw)
 
 	sensorsRaw = findSensorRawCodes()
-	print "RawData: %s" %sensorsRaw
+	#print "RawData: %s" %sensorsRaw
 
 def init_EEPROM(addr):
 	global EEPROM_ADDR
@@ -198,6 +202,7 @@ def writeSensorQRData(sNo, data, raw):
         elif (sNo == 2):
             writeSensorData(0, SENSOR2_SLOT_ADDR, bytearray(data))
             writeSensorRawData(0, SENSOR2_RAW_ADDR, bytearray(raw))
+            #print sensorQR[0]
         else:
             print "1. Wrong parameters passed."
 
@@ -210,10 +215,12 @@ def readSensorQRData(sNo):
              if (sNo == 1):
                  sensorQR[0] = readSensorData(0, SENSOR1_SLOT_ADDR)
                  sensorQR[1] = readSensorRawData(0, SENSOR1_RAW_ADDR)
+                 #print "QR DATA"                 
                  #print sensorQR
              elif (sNo == 2):
                  sensorQR[0] = readSensorData(0, SENSOR2_SLOT_ADDR)
                  sensorQR[1] = readSensorRawData(0, SENSOR2_RAW_ADDR)
+                 #print "QR DATA"
                  #print sensorQR
              else:
                  print "2. Wrong parameters passed."

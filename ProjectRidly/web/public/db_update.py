@@ -5,7 +5,7 @@ Created on Mon Jul 27 11:28:19 2015
 @author: isaaccla
 """
 
-import briza_eeprom as be
+import briza_eeprom_v3 as be
 import time
 try:
     be.ui2eepromTransfer()    

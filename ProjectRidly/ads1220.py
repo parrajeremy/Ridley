@@ -74,7 +74,7 @@ def readADS_Data():
 
     spi.writeByte(0x08)
     time.sleep(0.1)
-    print pca.readReg(0x00)
+    #print pca.readReg(0x00)
 #    data = spi.writeByte(ADS_RREG | (ADS_RDATA << 2))
 #    time.sleep(1)
     data1 = spi.writeByte(ADS_DUMMY)

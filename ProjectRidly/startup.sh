@@ -1,4 +1,4 @@
-#!/bin/sh
+    #!/bin/sh
 echo "src/gz all http://repo.opkg.net/edison/repo/all" > /etc/opkg/base-feeds.conf
 echo "src/gz edison http://repo.opkg.net/edison/repo/edison" > /etc/opkg/base-feeds.conf
 echo "src/gz core2-32 http://repo.opkg.net/edison/repo/core2-32" > /etc/opkg/base-feeds.conf
@@ -28,10 +28,10 @@ chmod +x  /usr/lib/edison_config_tools/public/dbint.js
 chmod +x /home/root/Ridley/ProjectRidly/brizastartup.sh
 chmod +x /home/root/Ridley/ProjectRidly/sense.sh
 python /home/root/Ridley/ProjectRidly/sensesock.py
-python /home/root/Ridley/ProjectRidly/briza.py
+#python /home/root/Ridley/ProjectRidly/briza_v3.py
 sleep 2
-python /home/root/Ridley/ProjectRidly/stop_service.py
-#python /home/root/Ridley/ProjectRidly/briza_eeprom.py
+#python /home/root/Ridley/ProjectRidly/stop_service.py
+#python /home/root/Ridley/ProjectRidly/briza_eeprom_v3.py
 systemctl daemon-reload
 systemctl disable edison_config.service
 systemctl disable pwr-button-handler.service
